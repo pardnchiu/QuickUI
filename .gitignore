@@ -15,3 +15,6 @@ terser.cache.json
 
 # 保留編譯後的 dist
 !dist/
+
+docker-compose.yml
+static/image/cover.png

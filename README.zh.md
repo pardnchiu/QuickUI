@@ -1,18 +1,15 @@
-<img src="https://quickui.pardn.io/static/image/logo.png" width=80>
+![](./cover.png)
 
 # QuickUI: 輕量化前端框架
 
-> [!NOTE]
-> (原名：PDQuickUI，自 `0.6.0` 版本起更名為 QuickUI)
+[![Author](https://img.shields.io/badge/Author-邱敬幃%20Pardn%20Chiu-white)](https://github.com/pardnchiu)
+[![version](https://img.shields.io/npm/v/@pardnchiu/quickui)](https://www.npmjs.com/package/@pardnchiu/quickui)
+[![jsdeliver](https://img.shields.io/jsdelivr/npm/hm/@pardnchiu/quickui)](https://www.jsdelivr.com/package/npm/@pardnchiu/quickui)
 
 > QuickUI 是一個基於純 JavaScript 和原生 API 的輕量級前端框架，支持數據綁定、國際化 (i18n)、事件綁定、條件渲染以及循環渲染功能。
 
-![tag](https://img.shields.io/badge/tag-JavaScript%20Library-bb4444) 
-![size](https://img.shields.io/github/size/pardnchiu/QuickUI/dist%2FQuickUI.js)<br>
-[![npm](https://img.shields.io/npm/v/@pardnchiu/quickui)](https://www.npmjs.com/package/@pardnchiu/quickui)
-[![download](https://img.shields.io/npm/dm/@pardnchiu/quickui)](https://www.npmjs.com/package/@pardnchiu/quickui)
-[![jsdeliver](https://img.shields.io/jsdelivr/npm/hm/@pardnchiu/quickui)](https://www.jsdelivr.com/package/npm/@pardnchiu/quickui)<br>
-[![](https://img.shields.io/badge/read-English%20Version-ffffff)](https://github.com/pardnchiu/QuickUI/blob/main/README.en.md)
+> [!NOTE]
+> (原名：PDQuickUI，自 `0.6.0` 版本起更名為 QuickUI)
 
 ## 核心特色
 
@@ -201,6 +198,10 @@ const app = new QUI({
 </a> <a href="https://linkedin.com/in/pardnchiu" target="_blank">
     <img src="https://pardn.io/image/linkedin.svg" width="48" height="48">
 </a>
+
+## 星
+
+[![Star](https://api.star-history.com/svg?repos=pardnchiu/QuickUI&type=Date)](https://www.star-history.com/#pardnchiu/QuickUI&Date)
 
 ***
 
