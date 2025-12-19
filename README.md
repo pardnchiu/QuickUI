@@ -1,18 +1,15 @@
-<img src="https://quickui.pardn.io/static/image/logo.png" width=80>
+![](./cover.png)
 
 # QuickUI: Lightweight Frontend Framework
 
-> [!NOTE]
-> (Formerly known as PDQuickUI, renamed to QuickUI starting from version `0.6.0`)
+[![Author](https://img.shields.io/badge/Author-邱敬幃%20Pardn%20Chiu-white)](https://github.com/pardnchiu)
+[![version](https://img.shields.io/npm/v/@pardnchiu/quickui)](https://www.npmjs.com/package/@pardnchiu/quickui)
+[![jsdeliver](https://img.shields.io/jsdelivr/npm/hm/@pardnchiu/quickui)](https://www.jsdelivr.com/package/npm/@pardnchiu/quickui)
 
 > QuickUI is a lightweight frontend framework built on pure JavaScript and native APIs. Supports data binding, i18n support, event binding, conditional rendering, and loop rendering.
 
-![tag](https://img.shields.io/badge/tag-JavaScript%20Library-bb4444) 
-![size](https://img.shields.io/github/size/pardnchiu/QuickUI/dist%2FQuickUI.js)<br>
-[![npm](https://img.shields.io/npm/v/@pardnchiu/quickui)](https://www.npmjs.com/package/@pardnchiu/quickui)
-[![download](https://img.shields.io/npm/dm/@pardnchiu/quickui)](https://www.npmjs.com/package/@pardnchiu/quickui)
-[![jsdeliver](https://img.shields.io/jsdelivr/npm/hm/@pardnchiu/quickui)](https://www.jsdelivr.com/package/npm/@pardnchiu/quickui)<br>
-[![](https://img.shields.io/badge/查閱-中文版本-ffffff)](https://github.com/pardnchiu/QuickUI/blob/main/README.zh.md)
+> [!NOTE]
+> (Formerly known as PDQuickUI, renamed to QuickUI starting from version `0.6.0`)
 
 ## Features
 
@@ -201,6 +198,10 @@ For detailed terms and conditions, please see the [Software Usage Agreement](htt
 </a> <a href="https://linkedin.com/in/pardnchiu" target="_blank">
     <img src="https://pardn.io/image/linkedin.svg" width="48" height="48">
 </a>
+
+## Star History
+
+[![Star](https://api.star-history.com/svg?repos=pardnchiu/QuickUI&type=Date)](https://www.star-history.com/#pardnchiu/QuickUI&Date)
 
 ***
 
