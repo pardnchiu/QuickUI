@@ -1,128 +1,123 @@
-<!-- 
+<!--
 
     Copyright 2024 Pardn Ltd 帕登國際有限公司.
     Created by Pardn Chiu 邱敬幃.
     Email: dev@pardn.io
 
 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hans-TW">
-
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="robots" content="index, follow">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="index, follow" />
 
     <!-- SEO 標題與描述 -->
     <title>QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu</title>
-    <meta name="title" content="QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu">
-    <meta name="description" content="QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。">
-    <meta name="keywords" content="QuickUI, JavaScript, Frontend Rendering Framework, Virtual DOM, Efficient Rendering, Auto Update, UI Tools, Lightweight, Rapid Development, Pardn Chiu, 前端渲染框架, 虛擬 DOM, 高效渲染, 自動更新, UI工具, 輕量化, 快速開發, 邱敬幃">
-    <meta name="author" content="邱敬幃 Pardn Chiu">
-    <link rel="author" href="https://pardn.io">
-    <link rel="canonical" href="https://quickui.pardn.io/">
+    <meta name="title" content="QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu" />
+    <meta name="description" content="QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。" />
+    <meta name="keywords" content="QuickUI, JavaScript, Frontend Rendering Framework, Virtual DOM, Efficient Rendering, Auto Update, UI Tools, Lightweight, Rapid Development, Pardn Chiu, 前端渲染框架, 虛擬 DOM, 高效渲染, 自動更新, UI工具, 輕量化, 快速開發, 邱敬幃" />
+    <meta name="author" content="邱敬幃 Pardn Chiu" />
+    <link rel="author" href="https://pardn.io" />
+    <link rel="canonical" href="https://quickui.pardn.io/" />
 
     <!-- Favicon -->
-    <link rel="icon" href="https://quickui.pardn.io/static/image/logo.png" type="image/x-icon">
+    <link rel="icon" href="https://quickui.pardn.io/static/image/logo.png" type="image/x-icon" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu">
-    <meta property="og:description" content="QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。">
-    <meta property="og:image" content="https://quickui.pardn.io/static/image/cover.png">
-    <meta property="og:url" content="https://quickui.pardn.io/">
-    <meta property="og:site_name" content="QuickUI">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="zh_TW">
+    <meta property="og:title" content="QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu" />
+    <meta property="og:description" content="QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。" />
+    <meta property="og:image" content="https://quickui.pardn.io/static/image/cover.png" />
+    <meta property="og:url" content="https://quickui.pardn.io/" />
+    <meta property="og:site_name" content="QuickUI" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu">
-    <meta property="twitter:description" content="QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。">
-    <meta property="twitter:image" content="https://quickui.pardn.io/static/image/cover.png">
-    <meta property="twitter:url" content="https://quickui.pardn.io/">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu" />
+    <meta property="twitter:description" content="QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。" />
+    <meta property="twitter:image" content="https://quickui.pardn.io/static/image/cover.png" />
+    <meta property="twitter:url" content="https://quickui.pardn.io/" />
 
     <!-- Google Verification -->
-    <meta name="google-site-verification" content="YQQ2f6AchR8dcb55Az2BYd_mw4TrP0J1RApD-v2v65Y">
+    <meta name="google-site-verification" content="YQQ2f6AchR8dcb55Az2BYd_mw4TrP0J1RApD-v2v65Y" />
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L5VYEZPVXX"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-L5VYEZPVXX');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-L5VYEZPVXX");
     </script>
 
     <!-- Preload and Preconnect -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.1/css/all.min.css" as="style">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.1/css/all.min.css">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.1/css/all.min.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.1/css/all.min.css" />
 
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" as="style">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" />
 
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@pardnchiu/quickui@latest/dist/QuickUI.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@pardnchiu/nanomd@latest/dist/NanoMD.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@pardnchiu/quickui@latest/dist/QuickUI.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@pardnchiu/nanomd@latest/dist/NanoMD.js" as="script" />
 
     <!-- Local Resources -->
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/index.css" />
     <script src="/dist/QuickUI.js"></script>
 
     <!-- JSON-LD Schema -->
     <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            "datePublished": "2024-11-29",
-            "dateModified": "2024-12-20",
-            "inLanguage": "zh-TW",
-            "name": {
-                "@language": "zh-TW",
-                "@value": "QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "datePublished": "2024-11-29",
+        "dateModified": "2024-12-20",
+        "inLanguage": "zh-TW",
+        "name": {
+          "@language": "zh-TW",
+          "@value": "QuickUI - 輕量化網站前端框架 - 邱敬幃 Pardn Chiu"
+        },
+        "alternateName": {
+          "@language": "en",
+          "@value": "QuickUI - Lightweight Frontend Framework - Pardn Chiu"
+        },
+        "description": {
+          "@language": "zh-TW",
+          "@value": "QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。"
+        },
+        "alternateDescription": {
+          "@language": "en",
+          "@value": "QuickUI is a lightweight JavaScript framework with native APIs, featuring virtual DOM, efficient data monitoring, and automatic updates to streamline development and boost performance."
+        },
+        "url": ["https://quickui.pardn.io/", "https://quickui.pardn.io/?lang=zh", "https://quickui.pardn.io/?lang=en"],
+        "creator": {
+          "@type": "Person",
+          "name": [
+            {
+              "@language": "zh-TW",
+              "@value": "邱敬幃"
             },
-            "alternateName": {
-                "@language": "en",
-                "@value": "QuickUI - Lightweight Frontend Framework - Pardn Chiu"
-            },
-            "description": {
-                "@language": "zh-TW",
-                "@value": "QuickUI 是一款基於純 JavaScript 搭配原生 APIs 的輕量化網站前端框架，支援虛擬 DOM、高效數據監控與自動更新，專注於簡化開發流程並提升渲染效能。"
-            },
-            "alternateDescription": {
-                "@language": "en",
-                "@value": "QuickUI is a lightweight JavaScript framework with native APIs, featuring virtual DOM, efficient data monitoring, and automatic updates to streamline development and boost performance."
-            },
-            "url": [
-                "https://quickui.pardn.io/",
-                "https://quickui.pardn.io/?lang=zh",
-                "https://quickui.pardn.io/?lang=en"
-            ],
-            "creator": {
-                "@type": "Person",
-                "name": [
-                    {
-                        "@language": "zh-TW",
-                        "@value": "邱敬幃"
-                    },
-                    {
-                        "@language": "en",
-                        "@value": "Pardn Chiu"
-                    }
-                ],
-                "url": "https://pardn.io/",
-                "sameAs": [
-                    "https://github.com/pardnchiu"
-                ],
-                "email": "dev@pardn.io"
-            },
-            "image": "https://quickui.pardn.io/static/image/website.jpg"
-        }
-        </script>
+            {
+              "@language": "en",
+              "@value": "Pardn Chiu"
+            }
+          ],
+          "url": "https://pardn.io/",
+          "sameAs": ["https://github.com/pardnchiu"],
+          "email": "dev@pardn.io"
+        },
+        "image": "https://quickui.pardn.io/static/image/website.jpg"
+      }
+    </script>
   </head>
 
   <body id="app" :animation="fade-in">
@@ -142,7 +137,7 @@
     <section class="right">
       <!--  -->
       <section class="logo">
-        <img src="/static/image/logo.svg" alt="">
+        <img src="/static/image/logo.svg" alt="" />
         <section>
           <h1><span>Quick</span><span>UI</span></h1>
           <span>{{ i18n.title }}</span>
@@ -150,12 +145,12 @@
       </section>
 
       <section :display="flex" :gap="0.5rem">
-        <img src="https://img.shields.io/github/size/pardnchiu/QuickUI/dist%2FQuickUI.js" alt="">
+        <img src="https://img.shields.io/github/size/pardnchiu/QuickUI/dist%2FQuickUI.js" alt="" />
         <a href="https://www.npmjs.com/package/@pardnchiu/quickui" target="_blank" :text-decoration="none">
-          <img src="https://img.shields.io/npm/v/@pardnchiu/quickui" alt="npm版本">
+          <img src="https://img.shields.io/npm/v/@pardnchiu/quickui" alt="npm版本" />
         </a>
         <a href="https://www.jsdelivr.com/package/npm/@pardnchiu/quickui" target="_blank" :text-decoration="none">
-          <img src="https://img.shields.io/jsdelivr/npm/hm/@pardnchiu/quickui" alt="npm版本">
+          <img src="https://img.shields.io/jsdelivr/npm/hm/@pardnchiu/quickui" alt="npm版本" />
         </a>
       </section>
       <!--  -->
@@ -259,7 +254,7 @@
     </a>
     <!--  -->
     <script>
-      document.addEventListener("DOMContentLoaded", _ => {
+      document.addEventListener("DOMContentLoaded", (_) => {
         const url = new URL(location.href);
         const currentLanguage = navigator.language || navigator.userLanguage;
 
@@ -268,7 +263,7 @@
 
         if (lang != null) {
           isZh = /^zh/i.test(lang);
-        };
+        }
 
         lang = isZh ? "zh" : "en";
 
@@ -281,20 +276,19 @@
           i18nLang: lang,
           data: {
             lang: lang,
-            change: isZh ? "en" : "zh"
+            change: isZh ? "en" : "zh",
           },
           event: {
-            changeIntro: e => {
+            changeIntro: (e) => {
               const _this = e.target;
               const parent = _this.parentElement.parentElement;
               const index = Array.prototype.indexOf.call(parent.children, _this.parentElement);
 
               parent.dataset.index = index;
-            }
-          }
-        })
-      })
+            },
+          },
+        });
+      });
     </script>
   </body>
-
 </html>
