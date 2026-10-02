@@ -1,6 +1,6 @@
 {
   "name": "@pardnchiu/quickui",
-  "version": "0.6.20",
+  "version": "0.6.21",
   "description": "QuickUI is a lightweight frontend framework built on pure JavaScript and native APIs. Supports data binding, i18n support, event binding, conditional rendering, and loop rendering.",
   "main": "dist/QuickUI.js",
   "module": "dist/QuickUI.esm.js",
@@ -10,6 +10,7 @@
     "build:min": "npx terser src/QuickUI.debug.js -c -m -o dist/QuickUI.js --config-file terser.config.json",
     "build:esm": "npx terser src/QuickUI.debug.js -c -m -o dist/QuickUI.esm.js --config-file terser.config.json && echo 'export const QUI = window.QUI;' >> dist/QuickUI.esm.js",
     "build:once": "npm run build:debug && npm-run-all build:min build:esm",
+    "build:site": "node worker/build.mjs",
     "build": "chokidar src/QuickUI.debug.js -c 'npm-run-all build:min build:esm'",
     "sass:library": "sass src/sass:dist/ -w --style compressed --no-source-map",
     "sass:index": "sass static/sass/:static/css/ -w --style compressed --no-source-map",
@@ -25,19 +26,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pardnio/QuickUI.git"
+    "url": "git+https://github.com/pardnchiu/QuickUI.git"
   },
   "keywords": [
-    "javascript-library",
-    "front-end-framework",
-    "UI-framework",
-    "virtual-DOM",
-    "loop-rendering",
-    "conditional-rendering",
-    "pure-javascript",
-    "native-api",
-    "邱敬幃",
-    "pardnchiu"
+    "frontend-framework",
+    "virtual-dom",
+    "no-build-step",
+    "zero-dependency",
+    "lightweight",
+    "reactive",
+    "i18n",
+    "vanilla-javascript"
   ],
   "author": {
     "name": "邱敬幃 Pardn Chiu",
@@ -46,10 +45,10 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pardnio/QuickUI/issues",
+    "url": "https://github.com/pardnchiu/QuickUI/issues",
     "email": "dev@pardn.io"
   },
-  "homepage": "https://github.com/pardnio/QuickUI#readme",
+  "homepage": "https://quickui.pardn.io",
   "devDependencies": {
     "chokidar-cli": "3.0.0",
     "npm-run-all": "4.1.5",

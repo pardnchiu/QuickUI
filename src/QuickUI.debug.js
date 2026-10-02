@@ -621,6 +621,16 @@ function getCamelString(text) {
     // 移除空格
     return camelCaseStr[_replace](/\s+/g, "");
 }
+function getElement(text) {
+    if (text.startsWith("#")) {
+        return document.getElementById(text.substring(1));
+    }
+    else if (/[\.\[\]]/.test(text)) {
+        return document.querySelector(text);
+    }
+    return document.getElementById(text) || document.querySelector(text);
+}
+window.$ = getElement;
 function getElementAttributes(dom) {
     return [...dom.attributes].reduce((acc, e) => {
         acc[e.name] = e.value.trim();

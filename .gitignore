@@ -16,3 +16,5 @@ terser.cache.json
 # 保留編譯後的 dist
 !dist/
 .doc/version-generate/
+
+.doc
