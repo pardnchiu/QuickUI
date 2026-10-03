@@ -6,178 +6,192 @@
 
 ```mermaid
 graph TB
-    A[HTML Template / render function] --> B[Template Parser]
-    B --> C[vDOM Build]
-    C --> D[Diff / Patch]
-    E[Reactive Data - Proxy] -->|Change Detection| D
-    D -->|Minimal Ops| F[Real DOM]
-    G[i18n Locale Loading] --> C
-    H[Lifecycle Hooks] -.timing control.-> C
-    H -.timing control.-> D
-    I[Lazyload / SVG Listener] --> F
+    subgraph Input
+        A[DOM Element by id]
+        B[render Function Shorthand String]
+    end
+    B --> P[htmlParser]
+    A --> M[vDOM Template Model]
+    P --> M
+    I[i18n Locale Loading] --> D[Proxy Reactive Data]
+    D -->|Change| L[Lifecycle update 300ms Debounce]
+    M --> V[vDOM Expand for / if / path / Interpolation]
+    L --> V
+    V --> F[Diff to Patches]
+    F -->|requestAnimationFrame| R[Apply Patches to Real DOM]
+    R --> E[Event / model / Attribute Binding]
+    R --> O[Lazyload / SVG Listeners]
 ```
 
-## Module: Template Parser
+## Module: Template Parser (htmlParser)
 
-Parses HTML strings or DOM elements into a structured element model (tag / id / class / attributes / children).
+Parses the shorthand string returned by `render` (`tag#id.class(attr)[children]`) into an element tree that vDOM uses as the template model.
 
 ```mermaid
-graph TB
-    subgraph TemplateParser
-        A[htmlParser] --> B[ElementModel]
-        C[createElement] --> D[Element]
-        E[getElementAttribute] --> B
-        F[getElementIndex] --> B
+graph LR
+    subgraph htmlParser
+        A[Shorthand String] --> B[Parse Tag / id / class]
+        B --> C[Parse Attributes]
+        C --> D[Recursively Parse Children]
+        D --> E[DocumentFragment]
     end
-    Input[HTML string / DOM element] --> A
-    B --> Output[vDOM Build]
+    E --> F[vDOM Template Model]
 ```
 
 ## Module: vDOM
 
-The `vDOM` class converts a DOM element into a lightweight object representation (tag / props / children / data) that the diff algorithm compares between renders.
-
-```mermaid
-classDiagram
-    class vDOM {
-        +string tag
-        +Record~string,string~ props
-        +Array~vDOM|string~ children
-        +any data
-        +constructor(element)
-    }
-    class Patch {
-        <<type>>
-        CREATE
-        APPEND
-        REPLACE
-        TEXT
-        PROP
-        REMOVE
-    }
-    vDOM --> Patch : produces diff
-```
-
-## Module: QUI Core (Diff / Patch / Render Scheduling)
+Builds a new virtual tree from the template model and data, then diffs it against the previous tree to emit patches.
 
 ```mermaid
 graph TB
-    subgraph QUICore
-        A["#updateVdom()"] --> B["#renderChange()"]
-        B --> C[Compare old/new vDOM]
-        C --> D["#applyPatch()"]
-        D --> E["#patchDoCreate / #patchDoReplace / #patchDoAppend / #patchDoRemove"]
-        D --> F["#patchProp() / #setAttribute()"]
-        D --> G["#getNodeByPath()"]
+    subgraph vDOM
+        A[updateChildren] --> B[Expand :for]
+        B --> C[Filter :if / :else-if / :else]
+        C --> D[Load temp :path External HTML]
+        D --> E[Expand :for / :if Again]
+        E --> F["Replace {{ }} and i18n Text"]
+        F --> G[getPatches]
+        G --> H[diff Nodes]
+        H --> I[diffProps Attributes]
+        H --> J[diffChildren Children]
     end
-    Reactive[Reactive Data change] --> A
-    Lifecycle[Lifecycle.render / update] --> A
-    E --> RealDOM[Real DOM]
-    F --> RealDOM
+    K[Data Snapshot] --> A
+    I --> P[Patch List]
+    J --> P
+```
+
+```mermaid
+classDiagram
+    class Patch {
+        <<union>>
+        CREATE vdom index
+        APPEND vdom index
+        REPLACE vdom index
+        TEXT vdom value index
+        PROP vdom key value index
+        REMOVE index
+    }
+```
+
+## Module: QUI Core
+
+Handles initialization, render scheduling, patch application, and interaction binding.
+
+```mermaid
+graph TB
+    subgraph QUI
+        A[constructor] --> B[geti18nData]
+        B --> C[createReactiveObject]
+        C --> D[Lifecycle]
+        D --> E[updateVdom]
+        E --> F[renderChange]
+        F --> G[applyPatch]
+        G --> G1[patchDoRemove Deepest First]
+        G --> G2[patchDoCreate / Replace / Append]
+        G --> G3[patchProp]
+        G3 --> H1[addEventListener @ / qe-]
+        G3 --> H2[addInputListener :model]
+        G3 --> H3[setAttribute : / q-]
+    end
+    H3 --> S[lazyloadObserver / svgObserver]
+    U[lang / fragment] --> E
 ```
 
 ## Module: Reactive Data
 
-Recursively wraps the data object with a `Proxy`, intercepting property reads/writes and invoking a change callback that `Lifecycle.update` schedules into `#updateVdom`.
+`createReactiveObject` wraps data in recursive Proxies and reports the changed path to trigger an update.
 
 ```mermaid
-graph TB
-    subgraph ReactiveData
-        A[createReactiveObject] -->|get/set intercept| B[Proxy Handler]
-        B -->|nested object| A
-        B -->|change callback| C[callback]
+graph LR
+    subgraph createReactiveObject
+        A[get] -->|Value Is Object| B[Wrap in Proxy Recursively]
+        C[set] -->|Old and New Differ| D[callback]
     end
-    C --> Lifecycle["Lifecycle#update()"]
+    D --> E[Lifecycle.update]
 ```
 
 ## Module: Lifecycle
 
-Manages the callbacks for the six lifecycle stages and wraps the timing of render, update, and destroy.
+Wraps the render, update, and destroy flows with abortable pre-hooks and timed post-hooks.
 
 ```mermaid
 graph TB
     subgraph Lifecycle
-        A[render] --> B[beforeRenderCallback]
-        A --> C[renderedCallback]
-        D[update] --> E[beforeUpdateCallback]
-        D --> F[updatedCallback]
-        G[destroy] --> H[beforeDestroyCallback]
-        G --> I[destroyedCallback]
+        A[render] --> A1[beforeRender] --> A2[Run Render] --> A3[rendered Elapsed Seconds]
+        B[update] --> B0[Clear Timer 300ms Debounce] --> B1[beforeUpdate] --> B2[Run Update] --> B3[updated Elapsed Seconds]
+        C[destroy] --> C1[beforeDestroy] --> C2[Run Destroy] --> C3[destroyed Elapsed Seconds]
     end
 ```
 
-## Module: Listener (Lazyload / SVG)
+## Module: Listeners
+
+Uses IntersectionObserver to defer images and SVGs until they enter the viewport.
 
 ```mermaid
 graph TB
-    subgraph Listener
-        A[setLazyloadListener] --> B[IntersectionObserver]
-        C[setSvgListener] --> D[MutationObserver]
+    subgraph LazyloadListener
+        A[img lazyload] --> B{In Viewport}
+        B --> C[check200]
+        C -->|Success| D[Set src]
+        C -->|Failure| E[Default 404 Image]
     end
-    B -->|enters viewport| E[loads img src]
-    D -->|DOM change| F[replaces SVG attributes]
+    subgraph SVGListener
+        F[temp-svg src] --> G{In Viewport}
+        G --> H[Fetch SVG Text]
+        H -->|Success| I[Replace with svg Node Keeping id class onclick]
+        H -->|Failure| J[Set Content to ☒]
+    end
 ```
 
-## Module: Built-in Functions
-
-The set of utility functions available in template `{{ }}` interpolation and attribute bindings.
+## Module: Global Utilities
 
 ```mermaid
-graph TB
-    subgraph BuiltinFunctions
-        A[calc] --> B["CALC()"]
-        C[dateFormat] --> D["DATE()"]
-        E[getCamelString] --> F[Attribute name conversion]
-        G[removeEmptyTextNode] --> H[DOM cleanup]
-        I[getUniqueID] --> J[Anonymous container ID]
+graph LR
+    subgraph window
+        A[window.QUI] --> A1[QUI Class]
+        B[window.$] --> B1[getElement]
+        C[window._] --> C1[createElement]
     end
+    B1 --> D[getElementById / querySelector]
+    C1 --> E["tag#id.class Parsing / Attributes / Children"]
 ```
 
 ## Data Flow
 
-The complete request flow from initialization to a rendered update:
-
 ```mermaid
 sequenceDiagram
-    participant App as User Code
-    participant QUI as QUI Instance
-    participant I18n as i18n Loader
-    participant Reactive as Reactive Data
-    participant Lifecycle as Lifecycle
-    participant VDOM as vDOM Diff/Patch
-    participant DOM as Real DOM
-
-    App->>QUI: new QUI(options)
-    QUI->>I18n: #geti18nData(body)
-    I18n-->>QUI: locale data
-    QUI->>Reactive: createReactiveObject(data)
-    QUI->>Lifecycle: render(callback)
-    Lifecycle->>VDOM: #updateVdom()
-    VDOM->>VDOM: #renderChange() compares old/new vDOM
-    VDOM->>DOM: #applyPatch() applies minimal diff
-    Lifecycle-->>App: rendered
-
-    App->>Reactive: mutate data property
-    Reactive->>Lifecycle: trigger update callback
-    Lifecycle->>VDOM: #updateVdom()
-    VDOM->>DOM: #applyPatch()
-    Lifecycle-->>App: updated
+    participant U as User Code
+    participant Q as QUI
+    participant P as Proxy Data
+    participant L as Lifecycle
+    participant V as vDOM
+    participant D as Real DOM
+    U->>Q: new QUI(options)
+    Q->>Q: Load i18n
+    Q->>L: render
+    L->>V: Build new vDOM and diff
+    V-->>Q: Patch list
+    Q->>D: Apply patches on requestAnimationFrame
+    U->>P: app.data.x = y
+    P->>L: update (300ms debounce)
+    L->>V: Rebuild vDOM and diff
+    V-->>Q: Patch list
+    Q->>D: Apply differences
 ```
 
 ## State Machine
 
-State transitions of a QUI instance across its lifecycle stages:
-
 ```mermaid
 stateDiagram-v2
-    [*] --> Idle
-    Idle --> Rendering: new QUI()
-    Rendering --> Rendered: beforeRender → rendered
-    Rendered --> Updating: data change
-    Updating --> Rendered: beforeUpdate → updated
-    Rendered --> Destroying: manual destroy
-    Destroying --> Destroyed: beforeDestroy → destroyed
-    Destroyed --> [*]
+    [*] --> Initializing: new QUI
+    Initializing --> Rendering: i18n and data ready
+    Rendering --> Idle: rendered
+    Rendering --> Idle: beforeRender returns false
+    Idle --> Debouncing: data change
+    Debouncing --> Debouncing: change within 300ms
+    Debouncing --> Updating: timer fires
+    Updating --> Idle: updated
+    Updating --> Idle: beforeUpdate returns false
 ```
 
 ***

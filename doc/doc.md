@@ -4,8 +4,8 @@
 
 ## Prerequisites
 
-- A modern browser (ES6+, `Proxy`, `MutationObserver` support)
-- Node.js ≥ 18 (only required for building from source)
+- A modern browser with ES2022, `Proxy`, `IntersectionObserver`, and `structuredClone` support
+- Node.js and npm (only required for building from source)
 
 ## Installation
 
@@ -21,136 +21,158 @@ npm i @pardnchiu/quickui
 <script src="https://cdn.jsdelivr.net/npm/@pardnchiu/quickui@latest/dist/QuickUI.js"></script>
 ```
 
+Loading the script attaches three globals to `window`: `QUI`, `$`, and `_`.
+
 ### ESM
 
 ```javascript
-import { QUI } from "@pardnchiu/quickui/dist/QuickUI.esm.js";
+import { QUI } from "@pardnchiu/quickui";
 ```
+
+The `module` field in `package.json` points to `dist/QuickUI.esm.js`, which exports `export const QUI = window.QUI`.
 
 ### From Source
 
 ```bash
-git clone https://github.com/pardnio/QuickUI.git
+git clone https://github.com/pardnchiu/QuickUI.git
 cd QuickUI
 npm install
 npm run build:once
 ```
 
+`build:once` bundles `src/` into `src/QuickUI.debug.js` with `tsc`, then emits `dist/QuickUI.js` and `dist/QuickUI.esm.js` with terser.
+
 ## Usage
 
-### Basic
-
-Create a QUI instance and bind data:
+### Basic: Interpolation
 
 ```html
 <div id="app">
   <h1>{{ title }}</h1>
-  <p>{{ description }}</p>
+  <p>{{ user.name }}</p>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@pardnchiu/quickui@latest/dist/QuickUI.js"></script>
 <script>
   const app = new QUI({
     id: "app",
     data: {
       title: "Hello QuickUI",
-      description: "A lightweight frontend framework",
+      user: { name: "Pardn" },
     },
   });
+
+  setTimeout(() => {
+    app.data.title = "Updated";
+  }, 1000);
 </script>
 ```
 
-### Conditional Rendering
+`app.data` is a deep Proxy; assignments at any depth trigger an update.
 
-Control element visibility with `:if`, `:else-if`, `:else`:
+### Conditional Rendering
 
 ```html
 <div id="app">
   <p :if="status == active">Active</p>
   <p :else-if="status == pending">Pending</p>
   <p :else>Disabled</p>
+  <p :if="count > 0">{{ count }} items</p>
+  <p :if="name == empty">Name is missing</p>
 </div>
 
 <script>
-  const app = new QUI({
+  new QUI({
     id: "app",
-    data: {
-      status: "active",
-    },
+    data: { status: "active", count: 3, name: "" },
   });
 </script>
 ```
 
 ### Loop Rendering
 
-Iterate arrays or objects with `:for`:
-
 ```html
 <div id="app">
-  <!-- Array iteration -->
   <ul>
     <li :for="item in items">{{ item }}</li>
   </ul>
-
-  <!-- Object iteration (with key) -->
   <ul>
-    <li :for="(key, value) in user">{{ key }}: {{ value }}</li>
+    <li :for="(item, index) in items">{{ index }}: {{ item }}</li>
   </ul>
+  <ul>
+    <li :for="(key, value) in profile">{{ key }} = {{ value }}</li>
+  </ul>
+  <p>Total: {{ LENGTH(items) }}</p>
 </div>
 
 <script>
-  const app = new QUI({
+  new QUI({
     id: "app",
     data: {
-      items: ["Item A", "Item B", "Item C"],
-      user: { name: "Pardn", role: "Developer" },
+      items: ["A", "B", "C"],
+      profile: { name: "Pardn", role: "Developer" },
     },
   });
 </script>
 ```
 
-### Event Binding
+Arrays use `(value, index)`; objects use `(key, value)`.
 
-Bind DOM events with the `@event` syntax:
+### Events and Two-way Binding
 
 ```html
 <div id="app">
-  <button @click="handleClick">Click</button>
-  <input type="text" @input="handleInput" />
+  <input type="text" :model="keyword" />
+  <select :model="sort">
+    <option value="asc">asc</option>
+    <option value="desc">desc</option>
+  </select>
+  <button @click="search">Search</button>
+  <p>{{ keyword }} / {{ sort }}</p>
 </div>
 
 <script>
   const app = new QUI({
     id: "app",
-    data: {
-      message: "",
-    },
+    data: { keyword: "", sort: "asc" },
     event: {
-      handleClick: (e) => {
-        console.log("clicked");
-      },
-      handleInput: (e) => {
-        app.data.message = e.target.value;
+      search: (e) => {
+        if (app.data.keyword.trim() === "") {
+          console.warn("keyword is empty");
+          return;
+        }
+        console.log("search", app.data.keyword, app.data.sort);
       },
     },
   });
 </script>
 ```
 
-### Two-way Binding
+`checkbox` and `radio` inputs are grouped by `name`, and the checked values are joined with `,` before being written back.
 
-Keep form elements in sync with data using `:model`:
+### Attribute and Style Binding
 
 ```html
 <div id="app">
-  <input type="text" :model="username" />
-  <p>Hello, {{ username }}</p>
+  <a :href="link" :title="tip">{{ UPPER(label) }}</a>
+  <div :background-color="color" :hide="hidden">box</div>
+  <div :html="snippet"></div>
+  <p>{{ CALC(price * 1.05) }}</p>
+  <p>{{ DATE(createdAt, YYYY-MM-DD HH:mm) }}</p>
 </div>
 
 <script>
-  const app = new QUI({
+  new QUI({
     id: "app",
     data: {
-      username: "",
+      link: "https://github.com/pardnchiu/QuickUI",
+      tip: "repo",
+      label: "quickui",
+      color: "#3498db",
+      hidden: false,
+      snippet: "<strong>raw html</strong>",
+      price: 100,
+      createdAt: 1735660800,
     },
   });
 </script>
@@ -158,179 +180,203 @@ Keep form elements in sync with data using `:model`:
 
 ### i18n
 
-Switch languages via JSON locale files and the `i18n.key` syntax:
-
 ```html
 <div id="app">
   <h1>{{ i18n.title }}</h1>
-  <button @click="switchLang">Switch Language</button>
+  <input :placeholder="i18n.hint" />
+  <button @click="toEn">English</button>
 </div>
 
 <script>
   const app = new QUI({
     id: "app",
     i18n: {
-      zh: { title: "歡迎" },
-      en: { title: "Welcome" },
+      zh: { title: "歡迎", hint: "請輸入" },
+      en: "/locales/en.json",
     },
     i18nLang: "zh",
-    data: {},
     event: {
-      switchLang: () => {
-        app.lang("en");
-      },
+      toEn: () => app.lang("en"),
     },
   });
 </script>
 ```
 
-### Block Insertion
+String values are fetched as JSON. A failed fetch leaves that locale empty, and text falls back to the raw key. `lang()` ignores locales that are not defined.
 
-Dynamically load and insert an external HTML file with `<temp :path="...">`:
-
-```html
-<temp :path="/components/header.html"></temp>
-```
-
-### Lazy Loading
-
-Defer image loading until it enters the viewport with `:lazyload`:
+### External HTML Blocks, Lazy Images, and Inline SVG
 
 ```html
-<img :lazyload="imageUrl" />
+<div id="app">
+  <temp :path="headerPath"></temp>
+  <img :lazyload="cover" :effect="circle" />
+  <temp-svg :src="icon" class="icon"></temp-svg>
+</div>
+
+<script>
+  new QUI({
+    id: "app",
+    data: {
+      headerPath: "/components/header.html",
+      cover: "/images/cover.jpg",
+      icon: "/images/icon.svg",
+    },
+    option: { lazyload: true, svg: true },
+  });
+</script>
 ```
+
+Failed images fall back to a default 404 image; failed SVG fetches replace the node content with `☒`.
 
 ### Lifecycle
-
-Define lifecycle hooks with `when`:
 
 ```html
 <script>
   const app = new QUI({
     id: "app",
-    data: {},
+    data: { ready: false },
     when: {
       beforeRender: () => {
-        console.log("before render");
+        if (!navigator.onLine) {
+          console.error("offline, skip render");
+          return false;
+        }
       },
-      rendered: () => {
-        console.log("rendered");
-      },
-      beforeUpdate: () => {
-        console.log("before update");
-      },
-      updated: () => {
-        console.log("updated");
-      },
-      beforeDestroy: () => {
-        console.log("before destroy");
-      },
-      destroyed: () => {
-        console.log("destroyed");
-      },
+      rendered: (sec) => console.log("rendered in", sec, "s"),
+      beforeUpdate: () => console.log("before update"),
+      updated: (sec) => console.log("updated in", sec, "s"),
     },
   });
 </script>
 ```
 
-## API Reference
+Returning `false` from a `before*` hook aborts that render or update; `rendered` and `updated` receive the elapsed time in seconds.
 
-### QUI Constructor
+### Render Function to DocumentFragment
 
-```typescript
-new QUI(options: {
-  id?: string;
-  render?: () => string;
-  data?: Record<string, any>;
-  event?: Record<string, Function>;
-  i18n?: Record<string, string | object>;
-  i18nLang?: string;
-  once?: boolean;
-  option?: {
-    svg?: boolean;
-    lazyload?: boolean;
-  };
-  when?: {
-    beforeRender?: () => void;
-    rendered?: () => void;
-    beforeUpdate?: () => void;
-    updated?: () => void;
-    beforeDestroy?: () => void;
-    destroyed?: () => void;
-  };
-})
+```javascript
+import { QUI } from "@pardnchiu/quickui";
+
+const card = new QUI({
+  render: () => `div.card[ h2[ "{{title}}" ] ]`,
+  data: { title: "Card" },
+  once: true,
+  when: {
+    rendered: () => {
+      card
+        .fragment()
+        .then((fragment) => document.body.appendChild(fragment))
+        .catch((err) => console.error("render failed", err));
+    },
+  },
+});
 ```
 
-### Constructor Parameters
+Without `id`, the `render` output mounts onto a detached `<section class="QUIFragment">`; call `fragment()` to extract it and insert it yourself. `body` is assigned only after data initialization (including i18n fetches) completes, so call `fragment()` from `rendered` or later. The shorthand removes all whitespace inside double quotes (use `&#32;` for a space) and cannot express `:for`, `:if`, `:model`, or `<temp :path>`; use `q-` / `qe-` prefixes for attribute and event binding.
+
+### Global Utilities `$` and `_`
+
+```javascript
+const root = $("#app");
+if (root == null) {
+  throw new Error("#app not found");
+}
+
+const list = _("ul.list", [
+  _("li.item", "first"),
+  _("li.item", { "data-id": "2", color: "red" }, "second"),
+]);
+
+root.appendChild(list);
+```
+
+## API Reference
+
+### `new QUI(options)`
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|--------------|
-| `id` | `string` | Conditional | ID of the DOM element to bind, mutually exclusive with `render` |
-| `render` | `() => string` | Conditional | Custom render function returning an HTML string |
-| `data` | `Record<string, any>` | No | Reactive data object |
-| `event` | `Record<string, Function>` | No | Collection of event handler functions |
-| `i18n` | `Record<string, string \| object>` | No | Locale definitions, values are JSON paths or objects |
-| `i18nLang` | `string` | No | Default locale, defaults to `"zh"` |
-| `once` | `boolean` | No | When `true`, data is not wrapped in a Proxy (static render) |
-| `option.svg` | `boolean` | No | Enables the SVG listener, defaults to `true` |
+|-----------|------|----------|-------------|
+| `id` | `string` | Conditional | ID of the element to bind; `render` is required when omitted |
+| `render` | `() => string` | Conditional | Returns a shorthand string (`tag#id.class(attr: "value")[ children ]`); with `id`, it replaces that element's children as the template |
+| `data` | `Record<string, any>` | No | Reactive data |
+| `event` | `Record<string, Function>` | No | Event handlers referenced by name from `@event` |
+| `i18n` | `Record<string, object \| string>` | No | Locale definitions; strings are treated as JSON file URLs |
+| `i18nLang` | `string` | No | Initial locale, defaults to `"zh"` |
+| `once` | `boolean` | No | When `true`, data is not wrapped in a Proxy and renders once |
+| `option.svg` | `boolean` | No | Enables `temp-svg` inlining, defaults to `true` |
 | `option.lazyload` | `boolean` | No | Enables lazy image loading, defaults to `true` |
-| `when` | `object` | No | Collection of lifecycle hooks |
+| `when` | `object` | No | Lifecycle hooks |
 
-### Instance Methods
+### Instance Members
 
-| Method | Signature | Description |
-|--------|-----------|--------------|
-| `lang` | `lang(lang: string): void` | Switches the current locale |
-| `fragment` | `fragment(): Promise<DocumentFragment>` | Returns the rendered DOM fragment |
+| Member | Signature | Description |
+|--------|-----------|-------------|
+| `data` | `Record<string, any>` | Reactive data (a plain object when `once: true`) |
+| `event` | `Record<string, Function>` | Event handler map |
+| `body` | `Element` | Bound root element |
+| `lang` | `lang(lang: string): void` | Switches locale; ignored when the locale is undefined |
+| `fragment` | `fragment(): Promise<DocumentFragment>` | Re-renders and returns a copy of the root element's child nodes |
+
+### Lifecycle Hooks (`when`)
+
+| Hook | Argument | Description |
+|------|----------|-------------|
+| `beforeRender` | none | Before the initial render; return `false` to abort |
+| `rendered` | `sec: number` | After the initial render |
+| `beforeUpdate` | none | Before a data-triggered update; return `false` to abort |
+| `updated` | `sec: number` | After an update |
+| `beforeDestroy` / `destroyed` | none / `sec: number` | Accepted, but `QUI` currently exposes no method that triggers destruction |
 
 ### Template Syntax
 
 | Syntax | Description | Example |
-|--------|--------------|---------|
-| `{{ value }}` | Text interpolation | `{{ title }}` |
-| `:html` | Raw HTML insertion | `:html="content"` |
-| `:for` | Loop rendering | `item in items`, `(key, value) in obj` |
-| `:if` | Conditional rendering | `:if="show"`, `:if="count > 0"` |
-| `:else-if` / `:elif` | Conditional branch | `:else-if="status == pending"` |
-| `:else` | Default branch | `:else` |
-| `:model` | Two-way data binding | `:model="username"` |
-| `:path` | Load an external HTML file | `:path="/components/header.html"` |
-| `:lazyload` | Lazy-load images | `:lazyload="image_url"` |
-| `:hide` | Conditional hiding | `:hide="isHidden"` |
-| `:[CSS property]` | Bind a style property directly | `:background-color="color"` |
-| `@event` / `qe-event` | Event binding | `@click="handleClick"` |
-| `:src` | Dynamic source | `:src="imageUrl"` |
-| `:href` | Dynamic link | `:href="linkUrl"` |
+|--------|-------------|---------|
+| `{{ key }}` | Text interpolation with nested paths | `{{ user.name }}` |
+| `{{ i18n.key }}` | Translation for the current locale | `{{ i18n.title }}` |
+| `:for` | Loop | `item in items`, `(item, index) in items`, `(key, value) in obj` |
+| `:if` / `:else-if` / `:elif` / `:else` | Conditional branches (must be adjacent siblings) | `:if="count > 0"` |
+| `:model` | Two-way binding (`input` / `select` / `textarea`) | `:model="keyword"` |
+| `@event` / `qe-event` | Event binding; the value names a function in `event` | `@click="search"` |
+| `:html` | Sets `innerHTML` | `:html="snippet"` |
+| `:id` / `:src` / `:alt` / `:href` | Sets the matching DOM property | `:href="link"` |
+| `:hide` | Applies `display: none` when truthy | `:hide="hidden"` |
+| `:<css-property>` | Writes inline style when the name belongs to `style` | `:background-color="color"` |
+| `:<attr>` / `q-<attr>` | Any other attribute is written via `setAttribute` | `:title="tip"`, `q-title="tip"` |
+| `:lazyload` | Lazy image loading; `:effect="circle"` switches to a spinner placeholder | `:lazyload="cover"` |
+| `<temp :path>` | Fetches external HTML and replaces the node | `<temp :path="headerPath">` |
+| `<temp-svg :src>` | Inlines SVG on viewport entry, keeping `id`, `class`, and `onclick` | `<temp-svg :src="icon">` |
+
+### Condition Operators
+
+| Operator | Description |
+|----------|-------------|
+| (none) | Boolean check |
+| `==` / `===` | String equality |
+| `!=` / `!==` | String inequality |
+| `>` / `<` / `>=` / `<=` | Numeric comparison |
+
+When the right operand is `null`, `true`, `false`, or `empty`, it is treated as a special value that checks for `null`, truthy, falsy, or an empty string respectively.
 
 ### Built-in Functions
 
-| Function | Syntax | Description |
-|----------|--------|--------------|
-| `LENGTH()` | `{{ LENGTH(items) }}` | Returns the length of an array or the key count of an object |
-| `CALC()` | `{{ CALC(price * 1.05) }}` | Numeric calculation supporting `+`, `-`, `*`, `/`, `%` |
-| `UPPER()` | `{{ UPPER(name) }}` | Converts to uppercase |
-| `LOWER()` | `{{ LOWER(name) }}` | Converts to lowercase |
-| `DATE()` | `{{ DATE(timestamp, YYYY-MM-DD) }}` | Formats a UNIX timestamp per the given format string |
+| Function | Example | Description |
+|----------|---------|-------------|
+| `LENGTH()` | `{{ LENGTH(items) }}` | Array/string length or object key count |
+| `CALC()` | `{{ CALC(price * 1.05) }}` | `variable operator number`, supporting `+ - * / %` |
+| `UPPER()` | `{{ UPPER(name) }}` | Uppercase |
+| `LOWER()` | `{{ LOWER(name) }}` | Lowercase |
+| `DATE()` | `{{ DATE(ts, YYYY-MM-DD HH:mm) }}` | Formats a UNIX timestamp in seconds |
 
-### Comparison Operators
+`DATE` formats accept only alphanumerics, `-`, `:`, `,`, and spaces. Available tokens: `YYYY`, `YY`, `MM`, `M`, `DD`, `D`, `HH`, `H`, `hh`, `h`, `mm`, `m`, `ss`, `s`, `SSS`, `a`, `A`, `ddd`.
 
-| Operator | Description | Example |
-|----------|--------------|---------|
-| `==` / `===` | Equal | `:if="status == active"` |
-| `!=` / `!==` | Not equal | `:if="status != disabled"` |
-| `>` | Greater than | `:if="count > 0"` |
-| `<` | Less than | `:if="count < 10"` |
-| `>=` | Greater or equal | `:if="count >= 5"` |
-| `<=` | Less or equal | `:if="count <= 100"` |
+### Global Utilities
 
-### Special Comparison Values
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `$` | `$(text: string): HTMLElement \| null` | `#` prefix uses `getElementById`; text containing `.`, `[`, or `]` uses `querySelector`; otherwise tries ID first, then selector |
+| `_` | `_(tag: string, attrs?: object, children?: string \| number \| Array)` | Creates an element; `tag` supports `div#id.class` notation, and `temp` creates a `DocumentFragment` |
 
-| Value | Description | Example |
-|-------|--------------|---------|
-| `null` | Checks for null | `:if="value == null"` |
-| `true` | Checks for truthy boolean | `:if="isActive == true"` |
-| `false` | Checks for falsy boolean | `:if="isActive == false"` |
-| `empty` | Checks for an empty string | `:if="name == empty"` |
+In `_`, the `attrs` keys `value`, `innerText`, `innerHTML`, `textContent`, and `contentEditable` are set as properties; `color`, `backgroundColor`, `width`, `height`, `display`, and `float` go to `style`; all others use `setAttribute`. String or number `children` become `innerHTML` (or `src` for `img`/`source`); array `children` append strings and `Element`s in order. With two arguments, a string, number, or array is treated as `children`, and anything else as `attrs`.
 
 ***
 
