@@ -1,0 +1,17 @@
+[
+  {
+    "package": "src/function",
+    "name": "$",
+    "kind": "func"
+  },
+  {
+    "package": "src/function",
+    "name": "_",
+    "kind": "func"
+  },
+  {
+    "package": "src/model",
+    "name": "QUI",
+    "kind": "class"
+  }
+]

@@ -1,0 +1,128 @@
+{
+  "home_title": {
+    "en": "Virtual DOM JavaScript Framework with Data Binding | QuickUI",
+    "zh": "JavaScript 前端框架：資料綁定與 i18n｜QuickUI"
+  },
+  "descriptions": {
+    "en": {
+      "home": "QuickUI is a vanilla JavaScript framework with virtual DOM diffing, data binding in plain HTML templates and runtime i18n, by 邱敬幃 Pardn Chiu (pardnchiu).",
+      "getting-started": "Install QuickUI from CDN, npm or ESM, build it from source, and bind your first data object to an HTML template.",
+      "architecture": "How QuickUI layers its entry class, virtual DOM, lifecycle, utilities and listeners, and how it compares with similar JavaScript libraries.",
+      "rendering-pipeline": "Each step of a QuickUI render: directive expansion, text replacement, index-based diffing and the six patch types.",
+      "reactive-data": "How the Proxy around app.data detects changes, which writes trigger a re-render, and when the data becomes available.",
+      "text-binding": "Write data into text with {{ value }} placeholders and insert raw HTML with the :html directive.",
+      "built-in-functions": "LENGTH, CALC, UPPER, LOWER and DATE inside {{ }}: syntax, supported operators and date tokens.",
+      "conditional-rendering": "Show elements with :if, :else-if and :else, the comparison operators, special values and evaluation rules.",
+      "loop-rendering": "Repeat elements over arrays and objects with :for, including index variables, loop scope and nested loops.",
+      "attribute-binding": "Bind data to HTML attributes with the : and q- prefixes, how values are dispatched, and how :hide decides.",
+      "style-binding": "Bind data to inline styles with :[CSS property] and replace the legacy :bg-* and camelCase names.",
+      "event-binding": "Wire native DOM events to handlers with @event or qe-, handler lookup rules, and getting loop items.",
+      "two-way-binding": "How :model writes input, textarea, select, checkbox and radio values back into data.",
+      "i18n": "Define locales as objects or JSON files, reference translations in text and attributes, and switch with app.lang().",
+      "lifecycle": "When beforeRender, rendered, beforeUpdate and updated fire, their arguments, and how returning false cancels a render.",
+      "block-insertion": "Load an external HTML file into a QuickUI template with the temp element and :path, including load order and failure cases.",
+      "lazyload": "Load images only when they enter the viewport with :lazyload, the loading placeholder and the 404 fallback.",
+      "svg-inline": "Replace a temp-svg element with the inline SVG markup of an external file so CSS can style it, and what is carried over.",
+      "effects": "Fade-in, expand and skeleton mask effects on the root element during the first QuickUI render.",
+      "constructor-options": "Every new QUI() option with its type and default, how id and render combine, and option interactions.",
+      "instance-api": "Methods and properties on a QUI instance: lang(), fragment(), data, event, body and isScheduled.",
+      "render-shorthand": "The tag#id.class(attr)[children] shorthand returned by render, whitespace handling and supported directives.",
+      "global-helpers": "The global $ element lookup and _ element builder that QuickUI registers on window, with argument rules.",
+      "deprecations": "QuickUI syntax planned for removal in 1.0.0: lifecycle object, snake_case hooks, legacy style names and animation."
+    },
+    "zh": {
+      "home": "QuickUI 是邱敬幃 Pardn Chiu（pardnchiu）開發的 JavaScript 前端框架：虛擬 DOM 差異更新、HTML 模板資料綁定與執行期 i18n，免建置。",
+      "getting-started": "以 CDN、npm 或 ESM 安裝 QuickUI，從原始碼建置，並把第一個資料物件綁定到 HTML 模板。",
+      "architecture": "QuickUI 的入口類別、虛擬 DOM、生命週期、工具函式與監聽器如何分層，以及與同類 JavaScript 函式庫的關係。",
+      "rendering-pipeline": "QuickUI 每次渲染的步驟：指令展開、文字替換、依索引比對，以及六種 Patch 的套用順序。",
+      "reactive-data": "app.data 的 Proxy 如何偵測變更、哪些寫法會觸發重新渲染，以及資料何時可以存取。",
+      "text-binding": "以 {{ value }} 把資料寫入文字，並以 :html 指令插入原始 HTML。",
+      "built-in-functions": "{{ }} 中的 LENGTH、CALC、UPPER、LOWER、DATE：語法、可用運算子與日期代碼。",
+      "conditional-rendering": "以 :if、:else-if、:else 控制顯示，含比較運算子、特殊比較值與判斷規則。",
+      "loop-rendering": "以 :for 依陣列或物件重複元素，含索引變數、迴圈作用域與巢狀迴圈。",
+      "attribute-binding": "以 : 與 q- 前綴把資料綁到 HTML 屬性、各屬性的寫入方式，以及 :hide 的判斷規則。",
+      "style-binding": "以 :[CSS 屬性] 把資料綁到行內樣式，以及舊式 :bg-* 與 camelCase 名稱的替代寫法。",
+      "event-binding": "以 @event 或 qe- 把原生 DOM 事件接到處理函式，含名稱查找規則與在迴圈中取得項目。",
+      "two-way-binding": ":model 如何把 input、textarea、select、checkbox、radio 的值寫回資料。",
+      "i18n": "以物件或 JSON 檔定義語系，在文字與屬性中引用翻譯，並以 app.lang() 切換語言。",
+      "lifecycle": "beforeRender、rendered、beforeUpdate、updated 的觸發時機、參數，以及回傳 false 取消渲染。",
+      "block-insertion": "以 temp 元素與 :path 把外部 HTML 檔載入 QuickUI 模板，含載入順序與失敗時的行為。",
+      "lazyload": "以 :lazyload 在圖片進入視窗時才載入，含載入佔位圖、404 替代圖與停用方式。",
+      "svg-inline": "把 temp-svg 元素換成外部 SVG 檔的內嵌標記，讓 CSS 能控制樣式，以及會保留哪些屬性。",
+      "effects": "QuickUI 初次渲染時根元素的淡入、展開與骨架遮罩效果，以及 mask 的正確寫法。",
+      "constructor-options": "new QUI() 每個選項的型別與預設值、id 與 render 的組合，以及選項之間的交互作用。",
+      "instance-api": "QUI 實例上的方法與屬性：lang()、fragment()、data、event、body、isScheduled。",
+      "render-shorthand": "render 回傳的 tag#id.class(attr)[children] 簡寫格式、空白處理與可用指令。",
+      "global-helpers": "QuickUI 掛在 window 上的 $ 元素查找與 _ 元素建立工具，以及各參數規則。",
+      "deprecations": "QuickUI 預計在 1.0.0 移除的寫法：lifecycle 物件、snake_case 鉤子、舊式樣式名稱與 animation。"
+    }
+  },
+  "keywords": {
+    "en": {
+      "home": "quickui, javascript framework, virtual dom, data binding, frontend framework, i18n, zero dependency, no build step, 邱敬幃, pardn chiu, pardnchiu",
+      "getting-started": "quickui install, quickui cdn, @pardnchiu/quickui",
+      "architecture": "quickui architecture, virtual dom",
+      "rendering-pipeline": "virtual dom diff, patch, render pipeline",
+      "reactive-data": "proxy reactivity, reactive data",
+      "text-binding": "template interpolation, innerHTML",
+      "built-in-functions": "template functions, date format",
+      "conditional-rendering": "conditional rendering, :if",
+      "loop-rendering": "loop rendering, :for",
+      "attribute-binding": "attribute binding",
+      "style-binding": "style binding, inline style",
+      "event-binding": "event binding",
+      "two-way-binding": "two-way binding, :model",
+      "i18n": "i18n, localization",
+      "lifecycle": "lifecycle hooks",
+      "block-insertion": "html include, template partial",
+      "lazyload": "image lazy loading, intersectionobserver",
+      "svg-inline": "inline svg",
+      "effects": "fade-in, skeleton loading",
+      "constructor-options": "quickui options, api",
+      "instance-api": "quickui api",
+      "render-shorthand": "render function, shorthand",
+      "global-helpers": "createElement, querySelector helper",
+      "deprecations": "deprecation, migration"
+    },
+    "zh": {
+      "home": "quickui, javascript, 前端框架, 資料綁定, i18n, 邱敬幃, pardn chiu, pardnchiu"
+    }
+  },
+  "brand_keywords": [],
+  "person": {
+    "id": "https://pardn.io/#pardnchiu",
+    "name": "Pardn Chiu",
+    "alt_names": [
+      "邱敬幃",
+      "Chiu Ching-Wei",
+      "pardnchiu"
+    ],
+    "same_as": [
+      "https://pardn.io/",
+      "https://www.linkedin.com/in/pardnchiu",
+      "https://github.com/pardnchiu",
+      "https://dev.to/pardnchiu",
+      "https://x.com/pardnchiu"
+    ]
+  },
+  "organization": {
+    "id": "https://pardn.io/#organization",
+    "url": "https://pardn.io/",
+    "name": "Pardn Co., Ltd",
+    "name_zh": "帕登國際有限公司",
+    "same_as": [
+      "https://github.com/pardnio"
+    ]
+  },
+  "tagline": "Taiwan · Infrastructure Engineering",
+  "og_image": "https://quickui.pardn.io/static/image/cover.png",
+  "favicon": "/favicon.png",
+  "x_default": "",
+  "ai_usage": {
+    "train": "y",
+    "input": "y",
+    "search": "y"
+  },
+  "programming_language": "TypeScript",
+  "license_url": "https://opensource.org/licenses/MIT"
+}
