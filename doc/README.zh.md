@@ -15,7 +15,7 @@
 
 ***
 
-> 原生 JavaScript 前端框架，具備虛擬 DOM 差異更新、宣告式 HTML 模板與內建多語系切換
+> JavaScript 前端框架，具備虛擬 DOM 差異更新、HTML 模板資料綁定與執行期 i18n
 
 ## 目錄
 

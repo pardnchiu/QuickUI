@@ -1,7 +1,7 @@
 {
   "name": "@pardnchiu/quickui",
-  "version": "0.6.21",
-  "description": "QuickUI is a lightweight frontend framework built on pure JavaScript and native APIs. Supports data binding, i18n support, event binding, conditional rendering, and loop rendering.",
+  "version": "0.6.22",
+  "description": "A vanilla JavaScript framework with virtual DOM diffing, data binding in plain HTML templates, and runtime i18n",
   "main": "dist/QuickUI.js",
   "module": "dist/QuickUI.esm.js",
   "types": "src/interface.ts",
@@ -29,14 +29,14 @@
     "url": "git+https://github.com/pardnchiu/QuickUI.git"
   },
   "keywords": [
-    "frontend-framework",
+    "javascript-framework",
     "virtual-dom",
-    "no-build-step",
+    "data-binding",
+    "i18n",
     "zero-dependency",
-    "lightweight",
-    "pardnchiu",
-    "邱敬幃",
-    "vanilla-javascript"
+    "no-build-step",
+    "vanilla-javascript",
+    "pardnchiu"
   ],
   "author": {
     "name": "邱敬幃 Pardn Chiu",

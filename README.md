@@ -15,7 +15,7 @@
 
 ***
 
-> A vanilla JavaScript frontend framework with virtual DOM diffing, declarative HTML templates, and runtime i18n
+> A vanilla JavaScript framework with virtual DOM diffing, data binding in plain HTML templates, and runtime i18n
 
 ## Table of Contents
 
